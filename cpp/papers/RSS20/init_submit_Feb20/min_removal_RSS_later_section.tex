@@ -1,0 +1,134 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{times}
+
+% numbers option provides compact numerical references in the text. 
+
+\usepackage{graphics} % for pdf, bitmapped graphics files
+\usepackage{epsfig} % for postscript graphics files
+\usepackage{mathptmx} % assumes new font selection scheme installed
+\usepackage{times} % assumes new font selection scheme installed
+\usepackage{amsmath} % assumes amsmath package installed
+\usepackage{amssymb}  % assumes amsmath package installed
+%\usepackage{amsthm}
+\usepackage{bm}
+\usepackage{mathrsfs}
+\usepackage{xcolor}
+\usepackage{cite}
+\usepackage{threeparttable}
+\usepackage{multirow}
+\usepackage{bigdelim}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{comment}
+
+\usepackage[numbers]{natbib}
+\usepackage{multicol}
+\usepackage[bookmarks=true]{hyperref}
+
+\pdfinfo{
+   /Author (Homer Simpson)
+   /Title  (Robots: Our new overlords)
+   /CreationDate (D:20101201120000)
+   /Subject (Robots)
+   /Keywords (Robots;Overlords)
+}
+
+\begin{document}
+
+
+\title{Theoretically Complete Solution to the Optimal Non-repetitive Coverage Task of Arbitrary Shape Object with Minimal Discontinuities for a Non-redundant Robot Manipulator}
+
+\author{Tong Yang$^1$, Jaime Valls Miro$^2$, Yue Wang$^{1*}$ and Rong Xiong$^1$
+\thanks{$^1$ Tong Yang, Qianen Lai, Yue Wang and Rong Xiong are with the State Key 
+Laboratory of Industrial Control and Technology, Zhejiang University, P.R. China. 
+}
+\thanks{$^2$ Jaime Valls Miro is with the Centre for Autonomous Systems (CAS), University of Technology Sydney (UTS), Sydney, Australia.}
+\thanks{$^*$ Corresponding Author. \newline \indent
+E-mail address: {\tt\small wangyue@iipc.zju.edu.cn}}
+}
+
+\maketitle
+
+\begin{abstract}
+
+
+In our previous work~\cite{}, the coverage path planning (CPP) problem for non-redundant manipulator ensuring minimum number of discontinuities is proved finitly solvable, and a mechanism to derive all topological solutions is proposed. However, the topological graph is created just based on some classical constraints of the manipulator, which is solvable only if all cells are simply-connected. 
+For various purposes, additional measurements are introduced and additional thresholds based on them determine the shape of the cells. 
+Typically, the shapes of all cells can be classified through their genus, i.e., the number of ``holes", while our previous work only proves the solvability of the simply-connected cells. 
+
+In this paper, aiming to solve the topological graph created from any quality measurement, we consider the solvability of the cells with all possible genus. 
+The novel contribution of this paper is to show that any shape of topological graphs based on any quality measurement are finitely solvable, and an iterative solver is designed to find all optimal solutions. 
+
+
+\end{abstract}
+
+\IEEEpeerreviewmaketitle
+
+\section{Related Works}\label{section_related_works}
+Almost all state-of-the-art methods to solve the coverage path planning (CPP) problem~\cite{choset2001coverage}~\cite{galceran2013a}
+first divide the target surface into cells then solve the CPP problem in each cell, so called cellular decomposition. Efforts has been made to create novel cellular decompositions for the application of template coverage path within each cell~\cite{choset2000exact}~\cite{Acar2002Morse}~\cite{lumelsky1990dynamic}. 
+
+
+%For the coverage task of the manipulator, 
+%~\cite{rososhansky2011coverage} considered the contact mechanics problem to solve the tool-path planning problem. 
+
+
+For the optimal coverage task using the manipulator, some of them focused on metrics such as path length and time to completion, but overlooked the cost of controlling the manipulator. For example, 
+Atkar \textit{et al.}~\cite{Atkar2003Towards} optimised the coverage path through chossing optimal starting points. 
+Huang~\cite{huang2001optimal} reduced movement cost by remaining on straight paths as long as possible thus minimising the number of turns. 
+
+We advocate that reducing the cost consuming at the discontinuous waypoint significantly outweighs the usual optimisation of the coverage process, since the transition between position and force/torque is unavoidable
+control~\cite{cheah2003brief}~\cite{heck2015switched}~\cite{mirrazavi2018a}~\cite{solanes2018adaptive}~\cite{solanes2019robust}. 
+
+
+
+In dealing with the optimal non-revisiting coverage path planning (NCPP) problem, the mainstream discussions on the non-revisiting 
+property focus only in the microlevel, i.e., the physical place of the coverage path. For example,~\cite{Atkar2009Hierarchical} considered 
+the unifrom coverage in automotive spray painting problem, where the simple back-and-force boustrophedon path are deformed based on 
+the curvature and the topology of the surface.~\cite{hameed2016side-to-side} proposed a 3D coverage path for agricultural robots 
+minimising the skip/overlap areas between swaths. 
+
+
+
+As for the optimal NCPP problem with least discontinuities, it is inherent to the kinematics of manipulator mechanisms, and as such 
+the application of mobile robots will not encounter such problem. 
+% <ty> Should we recall the Tmech work here? 
+
+
+% <ty> Should we still mention Paus's work if we don't mention "optimal placement"? 
+We notice that~\cite{paus2017a} considered the pose optimisation of a mobile manipulator for coverage task, which proposed a 
+quality measurement for the place of the manipulator. However, what they focused is the combination of the robot placement and the CPP. 
+As for the detailed generation of the coverage path, they simply used the method in~\cite{Danner2000Randomized} with BiRRT applied 
+among the ``guard points" they chosed, and no specfic contribution in considering the joint-space discontinuities of the manipulator. And their work is not applicable for NCPP problem. 
+
+
+\begin{color}{red}
+% Maybe it should be placed before we introduce the work in Tmech? 
+Note that the contact point is significantly smaller than the scale of the cellular decomposition thus can be safely regarded as a particle. But then what we seek in the NCPP problem is the maximal joint-space continuity of the coverage path travelled by a particle. In other words, when modelling the NCPP problem into an abstract form, infinitesimal elements must be considered, and the existance of infinite narrow passage also makes significant difference (and they may still much larger than the contact point). 
+Hence, there is no way to apply the classical graph theory since no any area on the surface can be seen as a whole to form the "vertices", and the set of "edges" is exactly the solution of the NCPP problem thus impossible to create. 
+\end{color}
+
+%
+%\subsection{Ordering the Cutting Paths}
+%Since the distribution of the topological edges are cyclic, it is appropriate to assign the order through the indices of the edges in the (inner) boundary. Note that in this subsection we just list all possible combinations. The generation of the topological cutting paths will be discussed in subsection~\ref{subsection_arbitrary_placement}.  
+%First, we enforce the pair of topological edges $(\alpha_1, \alpha'_1)$ to be connected, then if the adjacent cells corresponding to $\alpha_1$ and $\alpha'_1$ can indeed be connected (have same possible colour), we have created a branch. Similar to $(\alpha_1, \alpha'_1)$, each of $(\alpha_1, \alpha'_2), \cdots, (\alpha_1, \alpha'_K)$ may lead to possible branches. After trying all $K$ outer topological edges, we try their combinations. Formally, all possible pairs can be listed in order:
+%Through the enumeration \ref{equ_single_1}, all possible combinations of the outer edges are listed in the brace. Next, it is natural to consider all possible combination of the inner edges. Different from the order in equation \ref{equ_single_1}, we first go through all combinations containing $\alpha_1$:
+%where the right side is same as that in Equ. \ref{equ_single_1}. 
+%The reason is that after the above-mentioned connectivities, in the following branches, $\alpha_1$ can no longer be connected to the outer edges (even in the sub-cell). For example, let the breaking process be 
+%where the right side is same as that in Equ. \ref{equ_single_1}. 
+
+
+
+\section*{Acknowledgments}
+
+%% Use plainnat to work nicely with natbib. 
+
+\bibliographystyle{plainnat}
+\bibliography{min_removal_RSS}
+
+\end{document}
+
+

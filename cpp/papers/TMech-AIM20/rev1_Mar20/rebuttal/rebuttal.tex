@@ -1,0 +1,292 @@
+\documentclass[11pt]{article}
+\usepackage{tcolorbox}
+\usepackage[framemethod=TikZ]{mdframed}
+\tcbuselibrary{skins}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{icomma}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fullpage}
+
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,enumerate,caption} %thmtools,
+\usepackage{booktabs}
+\usepackage[caption=false,font=footnotesize]{subfig}
+\usepackage{flushend} % to align the last page
+\usepackage{verbatim}
+\usepackage{color,soul}
+\usepackage{dirtytalk}
+\usepackage{hyperref}
+
+\newenvironment{reviewer}
+{\begin{mdframed}[roundcorner = 10pt,fontcolor=blue!70!black]\itshape}
+{\end{mdframed}}
+
+%\newenvironment{reviewer}{\begin{tcolorbox}[enhanced,frame
+% hidden,width=\textwidth,colback={red!60!white}]}{\end{tcolorbox}}
+%\newenvironment{reviewer}{\begin{tcolorbox}[enhanced,frame
+% hidden,width=\textwidth,colback={green!60!white}]}{\end{tcolorbox}}
+\newcommand{\bigspace}{\vspace{0.1cm}}
+
+\author{Jaime Jaime Valls Miro \and Tong Yang}
+
+\begin{document}
+%\noindent Dear Prof.~Park, Associate Editor and Reviewers,\\[0.3cm]
+%On behalf of my coauthors and myself, I would like to thank you for your time, the in-depth reviews and helpful
+%advice. Please find our detailed responses below. As instructed, we only made
+%minor changes to the paper (e.g., typos, missing references).
+%\\[0.3cm]Kind Regards,\\
+
+
+\setlength{\parindent}{0pt}
+\hspace*{0.5\linewidth}
+\begin{minipage}{0.7\linewidth}
+Dr. I-Ming Chen, Professor \par 
+Editor-in-Chief \par 
+IEEE/ASME Transactions on Mechatronics \par 
+%Fellow of Academy of Engineering, Singapore \par 
+%Fellow of IEEE \par
+%Fellow of ASME \par 
+School of Mechanical and Aerospace Engineering \par
+Nanyang Technological University \par
+50 Nanyang Ave, Singapore 639798 \par \bigskip
+March 13, 2020 % Change to re-submission date
+\end{minipage}
+
+\vspace{2cm}
+
+
+Dear Prof Chen, \par \bigskip
+
+We would like to thank you, the editor, and the reviewers for the helpful feedback on the revision of our manuscript. As instructed, we are now submitting a revised version of our paper (IEEE/ASME Transactions on Mechatroncics: TMECH-01-2020-9762)\footnote{``Cellular Decomposition for Non-repetitive Coverage Task with Minimum Discontinuities'' by Tong Yang (255613), Jaime Valls Miro (106478), Qianen Lai (272649), Yue Wang (156231) and Rong Xiong (113216)}. The paper has been modified according to your feedback and the Reviewers' comments. Please find our detailed responses in the following pages. %In addition, we have also highlighted the changes in the revised version of our manuscript in \textcolor{blue}{blue}.
+
+\par \bigskip All authors have read and approved this submission for publication. This work is original and has not been published, or is being considered for publication, elsewhere in any language. 
+
+\par \bigskip Once again, thank you for your time and kind consideration. 
+
+\bigskip
+Sincerely,
+\par \bigskip
+Tong Yang \par 
+Jaime Valls Miro \par
+Qianen Lai \par 
+Yue Wang\footnote{Corresponding author (\texttt{wangyue@iipc.zju.edu.cn})}\\
+Rong Xiong \\
+
+\clearpage
+
+\section*{Response to the Editors}
+We would like to thank the editors for the helpful suggestions on the revised manuscript. Please find our responses to the points raised by the editors, below, followed by a summary of changes in our revised manuscript. In the following sections, we answer the individual reviewers' questions in detail (\textcolor{red}{R1}, \textcolor{red}{R3} and \textcolor{red}{R3}).
+
+\begin{enumerate}[I.]
+ \item $ $
+  \begin{reviewer}
+  On the basis of the reviewers' ratings and comments as well as the Technical Editor's recommendation, your manuscript in the present form cannot be published in the Transactions. However, you are encouraged to conduct a Major Revision to carefully address both the Technical Editor’s and the reviewers' questions and concerns.
+  
+  The reviewers agree that the paper is interesting, although they have raised some major issues that need to be solved before publication. The revised version should be highly improved also in terms of clarity before possible acceptance.
+  \end{reviewer}
+  \noindent
+  We carefully addressed the issues raised by the reviewers regarding details of the proposed algorithms, clarity of presentation  and further experimental results. These changes are listed in the summary of changes as well as in our detailed response to the reviewers as follow. Thank you for the feedback and consideration.
+\end{enumerate}
+
+\subsection*{Summary of Changes:}
+\begin{itemize}
+\item[$-$] Based on the editorial and reviewers' comments, we have addressed presentation issues to increase clarity (\textcolor{red}{R1}, \textcolor{red}{R2}, \textcolor{red}{R3}). 
+\item[$-$] We fixed, improved, and where possible simplified notation and language throughout the paper (\textcolor{red}{R2}).
+\item[$-$] We added flow charts to visually supplement the explanations and make it easier for the reader to follow the manuscript (\textcolor{red}{R3}).
+\item[$-$] We significantly expanded the experimental section with examples of arbitrary shape objects, and added further comparative metrics (\textcolor{red}{R1}, \textcolor{red}{R2}).
+\item[$-$] We added more explanations in the accompanying video regarding details of the proposed algorithms and the inclusion of additional experiments (\textcolor{red}{R1}, \textcolor{red}{R2}).
+\end{itemize}
+
+
+
+ \clearpage
+
+
+
+\section*{Response to Reviewer 1}
+We thank the Reviewer for the careful examination of our response and revised paper, and for his/her helpful feedback and suggestions. Please see our detailed responses below.
+
+\begin{enumerate}[I.]
+
+ \item $ $
+  \begin{reviewer}
+     As for the format of the paper, I think it is necessary to add keywords to the article so that readers can better understand the research contents.
+  \end{reviewer}
+  \noindent We have added the suggested keywords under the abstract, in p.1, for a more comprehensive understanding of the work described. Thanks for the suggestion. The most fitting choices from the manuscript submission system include: ``Manipulator, Planning and Manipulator Motion Planning''. 
+  
+  \item $ $
+  \begin{reviewer}
+   The proposed method can be applied to mechanical polishing and painting in industrial production, so the current application methods in the assembly line of industrial production need to be introduced to enrich the research background with more references.
+  \end{reviewer}
+  \noindent We have added new references (1,2,3,4) and contextualise the above tasks in relation to the potential impact of the work presented in industrial automation, both in in Section I and VII. %We have also added a motivational example in a automated part manufacturing context as part of the additional examples added to the accompanying video. 
+  Thanks for the advice.
+  
+  \item $ $
+  \begin{reviewer}
+    This manuscript always focuses on inverse kinematics and joint space, but in my opinion, only the trajectory of the end-effector is considered and divided into cells. Therefore, how to generate the solution of inverse kinematics (IK) is also very important. The authors should explain the control signal (joint angle or joint
+velocity).
+  \end{reviewer}
+  \noindent Indeed, obtaining the IK solutions is an important step in the proposed CPP scheme. But we feel there might be a misunderstanding given the wording of the question. Reviewer 3 Comment I raised a query on a similar vein and we refer the Reviewer to the answer provided there that we feel will help to clarify the confusion. We note in particular the additonal explanations in Section I, and the expanded Figures 2 and 3, as well as the expanded examples. 
+
+In relation to the reference to the control signals, as depicted in Fig 3, the proposed scheme falls short of producing the actual path to be followed by the manipulator, as well as the actual motion controller. For the path, this is discretionary, any one within the shape of the final cells suggested by the algorithm will produce 
+trajectories where there is no need to adopt but one robot configuration to cover the full cell, and the same for each cell - this is the key outcome of the scheme. Examples are given in the results section, as well as Section I, so this is now more clear from the onset and will lead to a more comprehensive reading of the 
+remainder of the manuscript. 
+
+Likewise, the choice of controller to subsequently follow the path is outside the scope of the work described here. In the real examples, the standard UR5 controller has been used to track the final path. In simulation an ideal position controller is assumed.
+
+We feel the additions to the manuscript, including the expanded examples, substantially enhance the clarity of the manuscript and will aid the reader to better understand the paper. For this, we thank the reviewer to bring this to our attention during the review process.
+
+%TO DO We feel  In this paper, the key observation of constructing the relation between “colour" and the configurations in the joint-space is that, for non-redundant manipulator, there 1is no non-singular path connecting two configurations whose EEs are at a same point. This motivates us to use different colours on a point to denote different valid configura- tions for this point. The colours are defined not only for visualization, but also for the mathematical modelling of the realistic problem: Once we have specified a colour for each point on the surface (through the proposed algorithm), we will know all inverse kinematic solutions used for the manipulator. Through your word, we notice the unclear description in the process of generating the topological graph, so we added another flowchart illustrating this process. For the assignment of the joint-angles, the relation of the joint-space configurations and the colours is mentioned in Fig. 1 caption and the third paragraph in Section III-C and used in all figures.  As for your words “joint velocity", we regard it as the direction of the manipulator’s motion. In other words, it is about the physical pattern of the path of the end-effector on  the surface (also, the configuration in the joint-space, with unique specification of the IK solutions). Althrough many other conventional coverage path planning algorithms deal with the designing of the physical path, what we do is a higher-level topological planning of the coverage task, the cellular decomposition. Embedded with any other conventional CPP algorithm within each cell, the physical coverage path is generated.
+  
+  
+  
+  
+  \item $ $
+  \begin{reviewer}
+    When conducting simulations and experiments, it is generally necessary to give the parameters of the manipulator to increase the feasibility of the paper. In addition, the general UR5 manipulator is of six degrees of freedom (DOFs) or higher DOFs instead of five DOFs. Please add some description of the used manip-
+ulator.
+  \end{reviewer}
+  \noindent Further details about the Universal Robots UR5 manipulator characteristics used in the experiments have been added as Table 1 to the experimental settings discussed in Section (VI). 
+  The algorithm is applicable to any non-redundant manipulator, as the IK solution is a finite set, as outline at the outset in Section 1. Moreover, to apply the proposed algorithm to a polishing task, as shown in the experiments, the last revolute joint of the UR5 is unnecesary given the rotating nature of the actual EE tool. Hence, the last joint of the UR5 manipulator was locked, so that the robot arm effectively performed as a 5DoF manipulator. This was described at the beginning of the Section VI.
+  
+  \item $ $
+  \begin{reviewer}
+   Real world experiments in Section VI-C provides very little experimental process information. It is recommended to provide a link to the video of the experiment.
+  \end{reviewer}
+  \noindent A comprehensive video illustrating the concepts and experiments described in the paper had already been supplied in the original manuscript, it is detailed in footnote 1, at the end of Section 1. It appears the reviewer may have missed the reference. 
+%It can be found at:
+The video in our initial submission can be found at: 
+
+\url{www.youtube.com/watch?v=gyvXin60cCQ\&feature=youtu.be}
+
+and the improved version can be found at: 
+
+\url{https://youtu.be/Wbx3QyHds7s}
+
+The video URL has also been embedded in the pdf so that it is directly hyperreferenced, this is also apparent in the text font. 
+Moreover, the video has been further enhanced with more details about the algorithm for further clarity, and additional experimental examples as requested by Reviewer 2, comment IV.
+  
+  \item $ $
+  \begin{reviewer} 
+    The comparisons in the article is not intuitive. I suggest the author to give a comparison of the energy consumption and time consumption of different methods when conducting the experiment, if possible.
+  \end{reviewer}
+  \noindent  An additional numerical comparison of the (extended) results has been added to the paper in Section VI (Results) , where the proposed optimal CPP method has been compared with other geometric coverage planners (spiral and Boustrophedon) on all the objects studied in relation to number of lift-offs and execution times. 
+The advantage of the minimum lift-off optimality for CPP is clearly apparent as per the comparative metrics collected in the new Table II. 
+This was to be expected given the sharp difference in the final number of lift-offs, which would ultimately overpower any other metrics considered, as is advocated in the motivation for this research, and is expected would be of most concern when it comes to automated production lines - as rightly suggested by the Reviewer in Comment II above.
+%Thanks for the reviewer’s advice. Your recommendations of comparison, energy comsumption and time consumption, are classical and straightforward, but not suitable for the work embedded with the algorithms to be compared. Please see the explaination below. 
+%In our perspective, the two simulated experiments are designed for illustrating two advantages of using the proposed algorithm as a high-level cellular decomposition before applying the conventional CPP algorithm: Helpful in designing the relative pose between the object and the manipulator, and helpful in disregarding large amounts of joint-space configurations which cause unnecessary lift-offs of the end-effector. The validity of the algorithm is proved by the three equivalences given in Section IV-A, from which all possible cellular decompositions are classified into finite categories in the sense of the number of lifting-off of the end-effector. Hence the validity of the
+  
+  \item $ $
+  \begin{reviewer}
+    There are some minor errors in the paper that need to be corrected. For example, In line 7 of Page 1, “Member, IEEE,," should be corrected as “Member, IEEE,"; In line 2 Page 2, “The remainder of this paper 1 is organised as follows" should be corrected as “The remainder of this paper is organised as follows".
+  \end{reviewer}
+  \noindent We have addressed all these minor issues carefully. Also those spotted by other Reviewers below. We thank the reviewers for the time and detailed consideration.
+  
+  \item $ $
+  \begin{reviewer}
+   As opposed to non-repetitive path, the repetitive motion planning of manipulator is also very significant in industrial production. It is recommended that the authors can briefly compare the repetitive motion planning task with the non-repetitive path task after referring to the following papers.
+
+1. A Data-Driven Cyclic-Motion Generation Scheme for Kinematic Control of Redundant Manipulators, IEEE Transactions Control System Technology, In Press.
+
+2. On Generalized RMP Scheme for Redundant Robot Manipulators Aided with Dynamic Neural Networks and Nonconvex Bound Constraints, IEEE Transactions on Industrial Informatics, 2019.
+  \end{reviewer}
+  \noindent We thank the reviewer for pointing out these works, which have now been incorporated in Section I, and indeed contribute to better motive and contextualise the proposed work. 
+  
+\end{enumerate}
+
+\clearpage
+
+\section*{Response to Reviewer 2}
+We thank the Reviewer for the careful examination of our response and the revised paper, and the helpful feedback and suggestions. Please see our detailed responses below.
+
+\begin{enumerate}[I.]
+ \item $ $
+  \begin{reviewer}
+    The research background needs to be more clear. It needs to extract the scientific problems to be solved, point out the problems of the existing solutions,and then draw the content of the paper to be studied.
+    \end{reviewer}
+  \noindent We have strengthened Section I in particular with more comprehensive explanations and added expanded Figures 2 and 3 to more clearly expose what the paper is aiming to achieve, and its scientific contribution. We also feel the examples consolidated within Figure 1 effectively illustrate 
+the issues being tackled in the manuscript. 
+
+More compative examples and metrics have also been added (refer to Comment IV below, as well as Reviewer 1 Comment VI) to better appreciate the extent of the scientific problem and solution. 
+As far as the authors are aware, there is no existing solution in the literature with the aim of generating manipulator coverage paths that ensure least number of discontinuities, the preeminent contribution of the paper. 
+ 
+%TO DO Thanks for the reviewer’s advice. The problem of undesirable discontinuity during the coverage task really exists. The reason of such problem is the bifurcations of the joint-space and the inapplicability of the singularties in all surface task because of lack of manipulability (robustness). The Fig.1 is a visualization of the problem, and the non-optimality of greedy solutions. As far as the author knows, there is no already-existing solutions for generating coverage path ensuring least number of discontinuities, which is the main contribution of this paper. Also, based on our analysis of the problem (in Section III-B), it is
+  
+  \item $ $
+  \begin{reviewer}
+    Combined with actual application scenarios, rather than directly abstracting into a mathematical model, it needs to be realistic.
+   \end{reviewer}
+  \noindent Please refer to the answer to Comment IV below, as well as Reviewer 1 Comment VI, and the suggestions by Reviewer 1 Comment II in regards to the application of the proposed optimal CPP to industrial settings. 
+We feel the additional context supplied, coupled with the analysis of new realistic objects studied in Section VI  nicely complement the  mathemathical proofs outlined in the manuscript, necessary to prove the validity of the proposed approach.
+%TO DO Theoretically, the problem of undesirable discontinuities during coverage task exists in all applications using manipulators with revolute joints, and the proposed algorithm is applicable in any dimension as long as the manipulator is non-redundant and the
+  
+  \item $ $
+  \begin{reviewer}
+    Language should be easy to understand, not too much advanced vocabulary.
+   \end{reviewer}
+  \noindent We have carefully revised the paper to simplify the language where possible as per the suggestion of the reviewer and hope to have increased clarity for the reader. Moreove we have added more pictorial narration in the shape of flowcharts (as also advised by Reviewer 3, comment II to improve clarity) 
+with new Figures 2 and 3 in Section 1, in an attempt to reduce the dependency on sometimes necessary, yet potentially complex textual descriptions, which we believe have made the paper easier to follow and comprehend. 
+  
+  
+  \item $ $
+  \begin{reviewer}
+    The experiment should be further improved to prove the algorithm, not a simple pot surface polishing.
+   \end{reviewer}
+  \noindent Two additional simulation experiments with objects of arbitrary shape have been added to the manuscript, and can also be viewed in the video referenced in the paper. 
+  The results have been added to Section VI.C, and the resulting solutions depicted in Figures 15 and 16. Moreover, a new comparative results Table II - suggested by Reviewer 1 Comment VI - has also been added constrasting the proposed coverage scheme with alternative solutions.
+  
+  Please note that the resulting paths for these extra experiments requested by the reviewer could have been equally transferred to the real robot, as was the case with the wok object, shown in Figures 17 and 18, and in the associated video. The cell decomposition and resulting topographical graphs and optimal solutions, the key contributions of the paper, would remain the same. 
+%provide the same information in relation to the main contribution of the manuscript lies in the novel cell decomposition algorithm to optimally divide the workspace into the minimum number of cells traversable without discontinuities. Any ensuing coverage path within (e.g. the ones chosen for the video animations) will then be equally valid, and not relevant to the proposed CPP. Moreover, the control motion on the actual robot to track the chosen path is complementary, so the examples in Figures 17 and 18 already show that capability. 
+
+But there is a compelling reason faced by the authors that made the implementation on the real robot not possible in time for this review: the institution where the robots are located, Zhejiang University, is in Hangzhou, China, and the unprecendented coronavirus situation faced by the country has meant the closure of the 
+university since late January, with researchers and academics having to work remotely. The isolation situation imposed still persists as this revision is written, and is scheduled to continue for the remainder of the semester.
+Under this extreme scenario, unthinkable only a couple of months back, the team has been unable to gain access to the robotic arm to make the robot follow the final paths produced, and they are thus pictorially shown in simulation instead (also in the associated video, where the new simulations can also be viewed). 
+We hope the reviewers can acknowledge the extraordinary situation under which the suggestions by the reviewer are being attended to. Other than minor discrepancies on execution times, we do not anticipate any consequential differences when ported to the real robot, as the validating case for the wok object already illustrated.
+
+\end{enumerate}
+
+\clearpage
+
+\section*{Response to Reviewer 3}
+We thank the Reviewer for the careful examination of our response and the revised paper, and the helpful feedback and suggestions. Please see our detailed responses below.
+
+\begin{enumerate}[I.]
+ \item $ $
+  \begin{reviewer}
+    For different topological graphs different configurations are chosen. I would like to know how these configurations are chosen? Is it that there are a number of solutions of configurations to cover the cells and any one is chosen or there is really a unique solution of a configuration.
+    \end{reviewer}
+  \noindent All the possible configurations that the manipulator may adopt at any given point on the surface of the object are considered by the algorithm, they are exhaustively searched first (inverse kinematics). The proposed CPP is an optimal mechanism to manipulate these sets of disjoint configurations (cells) 
+and obtain the minimum number of sets, each representative of a given robot configuration, so that each set can then be subsequently traced with any aribitrary path within, without the need to change robot configuration. We have stressed this point to add clarity in Section 1, particularly through the addition of 
+the two flow charts (Fig. 2 and 3), as suggested by the reviewer in the next point.
+
+  \item $ $
+  \begin{reviewer}
+    I would also appreciate a flow chart kind of thing starting from assignment of the task to the execution of the task by the robot to be there. Right now, it is not so clear. That would make it complete.
+   \end{reviewer}
+  \noindent Thanks for pointing this out. We have added two flow charts to Section 1 to illustrate the CPP steps, and to clearly depict the key contribution of the algorithm and where it sits in the robot motion planning pipeline to perform an optimal full coverage task.
+  
+  \item $ $
+  \begin{reviewer}
+   I would also like to know if the entire thing can be automated or not? End to end. A brief description about this will be helpful.
+   \end{reviewer}
+  \noindent Yes, the whole process is automated, end-to-end, from an input mesh of the object and awareness of the environment surrounding the robot (poses and obstacles), to producing an optimal coverage path for the robot to execute with guaranteed minimal lift-offs. As per the above comment, 
+we believe the two flow charts provide a clearer depiction of the proposed contribution by the CPP algorithm, and we thank the Reviewer for pointing this out and strengthen the paper this way.
+  
+  
+  \item $ $
+  \begin{reviewer}
+  There are many grammatical errors in the paper. I have highlighted a few in red as you will find in the attached paper. Please address them also.
+   \end{reviewer}
+  \noindent We have fixed all these grammatical omissions. Also others picked up by reviewer 1. We thank the Reviewer for the time and detailed consideration.
+  
+  \item $ $
+  \begin{reviewer}
+  I have also asked a few more questions in the attached file and highlighted some of the grammatical errors. I would suggest you to please go through the manuscript thoroughly.
+   \end{reviewer}
+  \noindent We could only locate references to grammatical inconsistencies in the annotated .pdf provided by the reviewer that was shared with us. All those have been attended to, and the manuscript has been thoroughly revised to correct any further linguistic mishaps.
+
+\end{enumerate}
+
+
+\end{document}
