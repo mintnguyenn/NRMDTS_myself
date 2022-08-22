@@ -12,25 +12,23 @@ env = cell(0);
 
 % a ground plane
 ground = collisionBox(1.2, 1.2, 0.01);
-Tground = trvec2tform([0.0 0.0 -0.1]);
-ground.Pose = Tground;
-env = {ground};
-clear ground
+ground.Pose = trvec2tform([0.0 0.0 -0.1]);
 
 % a sphere 
-s = collisionSphere(0.05)
-Ts = trvec2tform([0.3 0 0.3])
-s.Pose = Ts;
-env = [env; {s}];
-clear s
+sphere = collisionSphere(0.05);
+sphere.Pose = trvec2tform([0.3 0 0.3]);
+
+env = [{ground}; {sphere}];
+clear ground sphere;
 
 %% Set up manipulator (universal UR5)
-ur5 = loadrobot("universalUR5e", "DataFormat","row");
-currentRobotJConfig = homeConfiguration(ur5);
+ur5e = loadrobot("universalUR5e", "DataFormat","row");
+% ur5 = importrobot("universalUR5e.urdf", "DataFormat","row");
+currentRobotJConfig = homeConfiguration(ur5e);
 endEffector = "tool0";
 
 % The official ur5 doesn't have a collision model. So we manually add them.
-setUpCollisionDetection(ur5);
+% setUpCollisionDetection(ur5e);
 
 %% Set up visualisation perspective
 figure("Name","Visualization of Task-space Tracking with Minimum Discontinuities",...
@@ -39,7 +37,7 @@ figure("Name","Visualization of Task-space Tracking with Minimum Discontinuities
     "Visible","on");
 
 % Show the manipulator
-show(ur5,currentRobotJConfig,'PreservePlot',false,'Frames','off', 'Collisions', 'on');
+show(ur5e,currentRobotJConfig,'PreservePlot',false,'Frames','off', 'Collisions', 'on');
 
 % Show all obstacles
 hold on
@@ -54,7 +52,7 @@ grid off
 %% Set up task-space path
 taskInit = trvec2tform([0.3,0.2,0.05])*axang2tform([0 1 0 pi]);
 taskMed1 = trvec2tform([0.35,0.4,0.25])*axang2tform([0 1 0 pi/2])*axang2tform([0 0 1 pi/4]);
-taskMed2 = trvec2tform([0.5,0.0,0.1])*axang2tform([1 1 0 -pi/4]);
+taskMed2 = trvec2tform([0.4,0.0,0.1])*axang2tform([1 1 0 -pi/4]);
 taskFinal = trvec2tform([0.3,-0.3,0.5])*axang2tform([0 1 0 0]);
 
 % Collect the desired EE orientations
@@ -94,7 +92,7 @@ vertices = [];
 for i = 1:size(taskWaypoints, 3)
     allIk = analyticUR5eIK(taskWaypoints(:, :, i));
     for j = size(allIk, 1):-1:1
-        inCollision = checkCollision(ur5,allIk(j, :),env, ...
+        inCollision = checkCollision(ur5e,allIk(j, :),env, ...
             "Exhaustive","on","IgnoreSelfCollision","on");
         if any(inCollision)
             allIk(j, :) = [];
@@ -152,7 +150,7 @@ while i > 1
 %         path = plan(planner,startConfig,goalConfig);
 %         shortenedPath = shorten(planner,path,20);
         % We implement the PRM algorithm by ourselves
-        shortenedPath = manipulatorPRM(startConfig, goalConfig, ur5, env);
+        shortenedPath = manipulatorPRM(startConfig, goalConfig, ur5e, env);
         
         % interpStates = interpolate(planner, shortenedPath);
         % We need not refine the path because the PRM roadmap has been
@@ -174,8 +172,8 @@ jointConfigArray = jointCubic(jointConfigArray);
 
 %% Visualize Motion
 for i=1:size(jointConfigArray, 1)
-    poseNow = getTransform(ur5, jointConfigArray(i, 1:6), endEffector);
-    show(ur5,jointConfigArray(i, 1:6),'PreservePlot',false,'Frames','off');
+    poseNow = getTransform(ur5e, jointConfigArray(i, 1:6), endEffector);
+    show(ur5e,jointConfigArray(i, 1:6),'PreservePlot',false,'Frames','off','Collisions','off');
     if jointConfigArray(i, 7) == -1
         jointSpaceMarker = plot3(poseNow(1,4),poseNow(2,4),poseNow(3,4), '.', 'Color', [0.6, 0.6, 0.6], 'MarkerSize',20);
     elseif jointConfigArray(i, 7) == 1
