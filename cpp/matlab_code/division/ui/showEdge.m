@@ -1,9 +1,0 @@
-function showEdge(all_edge)
-
-
-for i = 1:size(all_edge, 1)
-   fprintf('Edge %d: origin_edge = [%d, %d], c1_ = %d, c2_ = %d, constraint_ = %d\n ', ...
-       all_edge(i).index_, ...
-       all_edge(i).origin_edge_(1), all_edge(i).origin_edge_(2), ...
-       all_edge(i).c1_, all_edge(i).c2_, all_edge(i).constraint_);
-end
