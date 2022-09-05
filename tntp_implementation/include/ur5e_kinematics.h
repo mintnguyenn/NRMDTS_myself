@@ -1,5 +1,5 @@
-#ifndef UR_KIN_H
-#define UR_KIN_H
+#ifndef UR5E_KIN_H
+#define UR5E_KIN_H
 
 namespace ur5e_kinematics {
   // @param q       The 6 joint values 
@@ -19,4 +19,4 @@ namespace ur5e_kinematics {
   int inverse(const double* T, double* q_sols, double q6_des=0.0);
 };
 
-#endif //UR_KIN_H
+#endif //UR5E_KIN_H

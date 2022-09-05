@@ -31,7 +31,8 @@ goal.Trajectory.Points = [startJointSend; endJointSend];
 
 goal.Trajectory.Header.Stamp = jointStateSubscriber.LatestMessage.Header.Stamp + rosduration(0.5); % This allows for the time taken to send the message. If the network is fast, this could be reduced.
 sendGoal(client,goal);
-%%
+pause(3);
+%
 currentJointState_321456 = (jointStateSubscriber.LatestMessage.Position)'; % Note the default order of the joints is 3,2,1,4,5,6
 currentJointState_123456 = [currentJointState_321456(3:-1:1),currentJointState_321456(4:6)];
 goal.Trajectory.Header.Stamp = rostime('Now','system');
