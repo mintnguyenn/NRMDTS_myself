@@ -13,13 +13,17 @@ else ()
 endif ()
 
 find_package(catkin REQUIRED COMPONENTS
-  cv_bridge
-  image_transport
+  roscpp
+  rospy
+  actionlib
+  actionlib_msgs
+  std_msgs
+  control_msgs
+  message_generation
 )
 
 find_package(OpenCV REQUIRED)
 
-## System dependencies are found with CMake's conventions
 find_package(Eigen3 REQUIRED)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated -Wdeprecated-declarations")
@@ -53,7 +57,7 @@ add_library(${PROJECT_NAME}_my_library src/ur5e_kinematics.cpp)
 ## Executable ##
 ###############
 ## Declare C++ executable
-add_executable(${PROJECT_NAME} src/main.cpp src/ur5e_kinematics.cpp)
+add_executable(${PROJECT_NAME} src/main.cpp src/ur5e_kinematics.cpp src/ur5e_controller.cpp)
 
 ## Add cmake target dependencies of the executable, enforces generating messages
 ## VERY VERY VERY HIGHLY unlikely to change
