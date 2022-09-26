@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <fstream>
 
 #include <ros/ros.h>
 #include <actionlib/client/simple_action_client.h>
@@ -21,11 +22,12 @@ public:
     Manipulator_Controller();
     ~Manipulator_Controller();
 
-    trajectory_msgs::JointTrajectory generateTrajectoryBetween2Points(std::vector<double> start_point, std::vector<double> end_point);
+    void trajectoryBetween2Points(std::vector<double> start_point, std::vector<double> end_point);
 
-    ros::NodeHandle nh_;
+    void trajectoryFromArray(std::vector<std::vector<double>> array);
 
-    Client *client_;
+private:
+    Client* client_;
     control_msgs::FollowJointTrajectoryGoal goal_;
 };
 
