@@ -25,7 +25,7 @@ void wrapToPi(std::vector<double> &joint_space){
     }
 }
 
-std::vector<std::vector<double>> input_data(std::string file_name)
+std::vector<std::vector<double>> input_dataa(std::string file_name)
 {
     std::vector<std::vector<double>> result;
     result.clear();
@@ -93,7 +93,7 @@ void Manipulator_Controller::trajectoryBetween2Points(std::vector<double> start_
 
 void Manipulator_Controller::trajectoryFromArray(std::vector<std::vector<double>> array){
 
-    array = input_data("/home/mintnguyen/Documents/NRMDTS_Implementation/tntp_implementation/motion.txt");
+    array = input_dataa("/home/mintnguyen/Documents/NRMDTS_Implementation/tntp_implementation/motion.txt");
 
     //
     goal_.trajectory.header.stamp = ros::Time::now() + ros::Duration(1);

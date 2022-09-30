@@ -14,15 +14,17 @@ endif ()
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
-  rospy
+  message_generation
   actionlib
   actionlib_msgs
   std_msgs
-  control_msgs
-  message_generation
+  geometry_msgs
+  visualization_msgs
+  moveit_ros_planning_interface
+  rviz_visual_tools
+  moveit_visual_tools
+  moveit_planners_ompl
 )
-
-find_package(OpenCV REQUIRED)
 
 find_package(Eigen3 REQUIRED)
 
@@ -57,7 +59,12 @@ add_library(${PROJECT_NAME}_my_library src/ur5e_kinematics.cpp)
 ## Executable ##
 ###############
 ## Declare C++ executable
-add_executable(${PROJECT_NAME} src/main.cpp src/ur5e_kinematics.cpp src/ur5e_controller.cpp)
+add_executable(${PROJECT_NAME} src/main.cpp 
+    src/ur5e_kinematics.cpp 
+    src/ur5e_controller.cpp
+    src/input_data.cpp
+    src/environmental_obstacles.cpp
+    src/prmstar.cpp)
 
 ## Add cmake target dependencies of the executable, enforces generating messages
 ## VERY VERY VERY HIGHLY unlikely to change
