@@ -90,36 +90,37 @@ int main(int argc, char **argv)
   for (unsigned int i = 0; i < 100; ++i)
     our_prmstar.add_milestone();
   
+  our_prmstar.showDetails();
 //////////////////////////////////////////////////// THE PRE-DEFINED TASK-SPACE CURVE///////////////////////////
-	std::cout << "YT: we define the task-space curve. " << std::endl;
-	// std::string file_name = "/home/yangtong/PRM_test/src/ur5_moveit_perception/data/case_study_1";
-	std::string file_name = "/home/mintnguyen/Documents/NRMDTS_Implementation/tntp_implementation/data/case_study_1";
-	std::string input_file_name = file_name + ".txt";
+	// std::cout << "YT: we define the task-space curve. " << std::endl;
+	// // std::string file_name = "/home/yangtong/PRM_test/src/ur5_moveit_perception/data/case_study_1";
+	// std::string file_name = "/home/mintnguyen/Documents/NRMDTS_Implementation/tntp_implementation/data/case_study_1";
+	// std::string input_file_name = file_name + ".txt";
 
-	std::vector<TaskSpaceWaypoint> TSpoints;
-	TSpoints = case_study_1_matrix44(input_file_name);
+	// std::vector<TaskSpaceWaypoint> TSpoints;
+	// TSpoints = case_study_1_matrix44(input_file_name);
 
-	// std::cout << "YT: We do collision checking for all the IKs" << std::endl;
-	collision_detection::CollisionRequest collision_request;
-	collision_detection::CollisionResult collision_result;
-	for(auto iter = TSpoints.begin(); iter != TSpoints.end(); ++iter)
-	{
-		int i = 0;
-		while(i < iter->iks_.size()){
-			std::vector<double> temp = iter->iks_[i];
-  			current_state.setJointGroupPositions(joint_model_group, temp);
+	// // std::cout << "YT: We do collision checking for all the IKs" << std::endl;
+	// collision_detection::CollisionRequest collision_request;
+	// collision_detection::CollisionResult collision_result;
+	// for(auto iter = TSpoints.begin(); iter != TSpoints.end(); ++iter)
+	// {
+	// 	int i = 0;
+	// 	while(i < iter->iks_.size()){
+	// 		std::vector<double> temp = iter->iks_[i];
+  // 			current_state.setJointGroupPositions(joint_model_group, temp);
 
-			collision_result.clear();
-			planning_scene->checkCollision(collision_request, collision_result);
+	// 		collision_result.clear();
+	// 		planning_scene->checkCollision(collision_request, collision_result);
 
-			if(collision_result.collision)
-				iter->iks_.erase(iter->iks_.begin()+i);
+	// 		if(collision_result.collision)
+	// 			iter->iks_.erase(iter->iks_.begin()+i);
 			
-			else
-				++i;
-		}
-		// std::cout << "Task-space point " << iter-TSpoints.begin() << " has " << iter->iks_.size() << " valid IKs" << std::endl;
-	}
+	// 		else
+	// 			++i;
+	// 	}
+	// 	// std::cout << "Task-space point " << iter-TSpoints.begin() << " has " << iter->iks_.size() << " valid IKs" << std::endl;
+	// }
 
 
 

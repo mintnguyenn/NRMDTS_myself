@@ -3,12 +3,15 @@
 #include <moveit/planning_scene/planning_scene.h>
 
 #include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/dijkstra_shortest_paths.hpp>
+
 #include <iterator>
 #include <utility>
 #include <algorithm>
 #include <vector>
-
 #include <time.h>
+#include <angles/angles.h>
+
 
 namespace optimal_tntp{
 
@@ -119,9 +122,16 @@ public:
         std::cout << "Number of edges created: " << all_edges_.size() << std::endl;
         std::cout << "Number of edges in PRM: " << edge_count << std::endl;
 
+        for (auto e : all_milestones_){
+            for (auto e1 : e.second.joint_){
+                std::cout << e1 << ";";
+            }
+            std::cout << std::endl;
+        }
+
     }
 
-private: 
+private:
 
     bool getPath(int fromId, int toId, std::vector<boost::graph_traits<
         boost::adjacency_list < boost::listS, boost::vecS, boost::directedS, 

@@ -1,9 +1,4 @@
 #include "prmstar.h"
-#include <angles/angles.h>
-
-#include <boost/graph/dijkstra_shortest_paths.hpp>
-
-#include <time.h>
 
 namespace optimal_tntp{
 

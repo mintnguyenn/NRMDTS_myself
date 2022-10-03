@@ -144,9 +144,6 @@ void addObstacles_case_study_1(const moveit::planning_interface::PlanningSceneIn
     planning_scene_interface_.addCollisionObjects(collision_objects);
 }
 
-
-
-
 void addObstacles_case_study_2(const moveit::planning_interface::PlanningSceneInterface& planning_scene_interface_, 
     const moveit::planning_interface::MoveGroupInterface& ur5e_)
 {
@@ -219,8 +216,6 @@ void addObstacles_case_study_2(const moveit::planning_interface::PlanningSceneIn
     // Now, let's add the collision object into the world
     planning_scene_interface_.addCollisionObjects(collision_objects);
 }
-
-
 
 void addObstacles_case_study_real_world(const moveit::planning_interface::PlanningSceneInterface& planning_scene_interface_, 
     const moveit::planning_interface::MoveGroupInterface& ur5_)
@@ -335,8 +330,3 @@ void addObstacles_case_study_real_world(const moveit::planning_interface::Planni
     // Now, let's add the collision object into the world
     planning_scene_interface_.addCollisionObjects(collision_objects);
 }
-
-
-
-
-
