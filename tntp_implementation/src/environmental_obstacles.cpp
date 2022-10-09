@@ -72,7 +72,7 @@ void addObstacles_case_study_1(const moveit::planning_interface::PlanningSceneIn
     box_pose.position.y = 0.0;
     box_pose.position.z = -0.28;
 
-    collision_object.pose = box_pose;
+    // collision_object.pose = box_pose;
     collision_object.primitives.push_back(primitive);
     collision_object.primitive_poses.push_back(box_pose);
     collision_object.operation = collision_object.ADD;
@@ -95,7 +95,6 @@ void addObstacles_case_study_1(const moveit::planning_interface::PlanningSceneIn
     box_pose.position.z = 0.4;
 
     collision_object.primitives.push_back(primitive);
-    // collision_object.pose = pose_stamped.pose;
     collision_object.primitive_poses.push_back(box_pose);
     collision_object.operation = collision_object.ADD;
     collision_objects.push_back(collision_object);

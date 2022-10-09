@@ -59,6 +59,7 @@ int main(int argc, char **argv)
 
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface_;
   moveit::planning_interface::MoveGroupInterface ur5e_("manipulator");
+  // std::cout << ur5e_.getCurrentPose() << std::endl;
 
   addObstacles_case_study_1(planning_scene_interface_, ur5e_);
 
@@ -68,11 +69,9 @@ int main(int argc, char **argv)
   for (auto iter = objects_in_environment.begin(); iter != objects_in_environment.end(); ++iter)
     std::cout << "Object " << count++ << " : " << iter->second.id << std::endl;
 
-
   std::cout << "YT: We add the objects into the planning scene. " << std::endl;
   for (auto iter = objects_in_environment.begin(); iter != objects_in_environment.end(); ++iter)
     planning_scene->processCollisionObjectMsg(iter->second);
-  
 
   moveit::core::RobotState &current_state = planning_scene->getCurrentStateNonConst();
   const moveit::core::JointModelGroup *joint_model_group = current_state.getJointModelGroup(PLANNING_GROUP);
@@ -87,43 +86,63 @@ int main(int argc, char **argv)
   optimal_tntp::PRMstar our_prmstar(collisionChecker);
 
   ros::WallTime initial_guess_time_start = ros::WallTime::now();
-  for (unsigned int i = 0; i < 100; ++i)
+  for (unsigned int i = 0; i < 500; ++i)
     our_prmstar.add_milestone();
-  
+
   our_prmstar.showDetails();
-//////////////////////////////////////////////////// THE PRE-DEFINED TASK-SPACE CURVE///////////////////////////
-	// std::cout << "YT: we define the task-space curve. " << std::endl;
-	// // std::string file_name = "/home/yangtong/PRM_test/src/ur5_moveit_perception/data/case_study_1";
-	// std::string file_name = "/home/mintnguyen/Documents/NRMDTS_Implementation/tntp_implementation/data/case_study_1";
-	// std::string input_file_name = file_name + ".txt";
 
-	// std::vector<TaskSpaceWaypoint> TSpoints;
-	// TSpoints = case_study_1_matrix44(input_file_name);
+  /////////////////////////// TESTING PRM STAR ALGORITHM //////////////////////////////////////////////
 
-	// // std::cout << "YT: We do collision checking for all the IKs" << std::endl;
-	// collision_detection::CollisionRequest collision_request;
-	// collision_detection::CollisionResult collision_result;
-	// for(auto iter = TSpoints.begin(); iter != TSpoints.end(); ++iter)
-	// {
-	// 	int i = 0;
-	// 	while(i < iter->iks_.size()){
-	// 		std::vector<double> temp = iter->iks_[i];
+  // std::vector<double> def{0, -M_PI / 2, 0, -M_PI / 2, 0, 0};
+  // std::vector<double> start{0, -M_PI, 0, -M_PI / 2, 0, 0};
+
+  // optimal_tntp::RobotState source(def);
+  // optimal_tntp::RobotState target(start);
+  // std::vector<optimal_tntp::RobotState> result;
+  // result.clear();
+
+  // our_prmstar.findPath(source, target, result);
+  // std::vector<std::vector<double>> joint_result;
+  // for (unsigned int j = 0; j < result.size(); j++)
+  // {
+  //   joint_result.push_back(result.at(j).joint_);
+  // }
+
+  // controller::linearInterpolateConfigurationss(joint_result);
+
+  // std::shared_ptr<Manipulator_Controller> controller(new Manipulator_Controller());
+  // controller->trajectoryFromArray(joint_result);
+
+  //////////////////////////////////////////////////// THE PRE-DEFINED TASK-SPACE CURVE///////////////////////////
+  // std::cout << "YT: we define the task-space curve. " << std::endl;
+  // // std::string file_name = "/home/yangtong/PRM_test/src/ur5_moveit_perception/data/case_study_1";
+  // std::string file_name = "/home/mintnguyen/Documents/NRMDTS_Implementation/tntp_implementation/data/case_study_1";
+  // std::string input_file_name = file_name + ".txt";
+
+  // std::vector<TaskSpaceWaypoint> TSpoints;
+  // TSpoints = case_study_1_matrix44(input_file_name);
+
+  // // std::cout << "YT: We do collision checking for all the IKs" << std::endl;
+  // collision_detection::CollisionRequest collision_request;
+  // collision_detection::CollisionResult collision_result;
+  // for(auto iter = TSpoints.begin(); iter != TSpoints.end(); ++iter)
+  // {
+  // 	int i = 0;
+  // 	while(i < iter->iks_.size()){
+  // 		std::vector<double> temp = iter->iks_[i];
   // 			current_state.setJointGroupPositions(joint_model_group, temp);
 
-	// 		collision_result.clear();
-	// 		planning_scene->checkCollision(collision_request, collision_result);
+  // 		collision_result.clear();
+  // 		planning_scene->checkCollision(collision_request, collision_result);
 
-	// 		if(collision_result.collision)
-	// 			iter->iks_.erase(iter->iks_.begin()+i);
-			
-	// 		else
-	// 			++i;
-	// 	}
-	// 	// std::cout << "Task-space point " << iter-TSpoints.begin() << " has " << iter->iks_.size() << " valid IKs" << std::endl;
-	// }
+  // 		if(collision_result.collision)
+  // 			iter->iks_.erase(iter->iks_.begin()+i);
 
-
-
+  // 		else
+  // 			++i;
+  // 	}
+  // 	// std::cout << "Task-space point " << iter-TSpoints.begin() << " has " << iter->iks_.size() << " valid IKs" << std::endl;
+  // }
 
   ros::spin();
 

@@ -76,7 +76,7 @@ public:
         edge_count_ = 0;
 
         maxConnectionDistance_ = 6;
-        maxCollisionCheckingDistance_ = 1.0;
+        maxCollisionCheckingDistance_ = 0.1;
 
         collisionChecker_ = collisionChecker;
 
@@ -122,12 +122,12 @@ public:
         std::cout << "Number of edges created: " << all_edges_.size() << std::endl;
         std::cout << "Number of edges in PRM: " << edge_count << std::endl;
 
-        for (auto e : all_milestones_){
-            for (auto e1 : e.second.joint_){
-                std::cout << e1 << ";";
-            }
-            std::cout << std::endl;
-        }
+        // for (auto e : all_milestones_){
+        //     for (auto e1 : e.second.joint_){
+        //         std::cout << e1 << ";";
+        //     }
+        //     std::cout << std::endl;
+        // }
 
     }
 

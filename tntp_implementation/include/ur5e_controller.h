@@ -8,6 +8,7 @@
 #include <ros/ros.h>
 #include <actionlib/client/simple_action_client.h>
 #include <actionlib/client/terminal_state.h>
+#include <angles/angles.h>
 
 #include <control_msgs/FollowJointTrajectoryAction.h>
 #include <control_msgs/FollowJointTrajectoryActionGoal.h>
@@ -15,6 +16,12 @@
 #include <trajectory_msgs/JointTrajectoryPoint.h>
 
 typedef actionlib::SimpleActionClient<control_msgs::FollowJointTrajectoryAction> Client;
+
+namespace controller{
+    void linearInterpolateConfigurationss(std::vector<std::vector<double>> &result);
+
+    // std::vector<double> wrapToPiJointSpacee(std::vector<double> joint_space);
+};
 
 class Manipulator_Controller
 {
@@ -25,6 +32,8 @@ public:
     void trajectoryBetween2Points(std::vector<double> start_point, std::vector<double> end_point);
 
     void trajectoryFromArray(std::vector<std::vector<double>> array);
+
+    // void linearInterpolateConfigurationss(std::vector<std::vector<double>> &result);
 
 private:
     Client* client_;

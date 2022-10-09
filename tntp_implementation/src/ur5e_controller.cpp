@@ -18,36 +18,68 @@ trajectory_msgs::JointTrajectoryPoint initialiseTrajectoryPoint(const std::vecto
 }
 
 void wrapToPi(std::vector<double> &joint_space){
-
-    for (unsigned int i=0; i<joint_space.size(); i++){
-        if (joint_space.at(i) > M_PI) joint_space.at(i) -= 2*M_PI;
-        else if (joint_space.at(i) < -M_PI) joint_space.at(i) += 2*M_PI;
+    for (unsigned int i = 0; i < joint_space.size(); i++){
+        if (joint_space.at(i) > M_PI) joint_space.at(i) -= 2 * M_PI;
+        else if (joint_space.at(i) < -M_PI) joint_space.at(i) += 2 * M_PI;
     }
 }
 
-std::vector<std::vector<double>> input_dataa(std::string file_name)
-{
-    std::vector<std::vector<double>> result;
-    result.clear();
+std::vector<double> wrapToPiJointSpacee(std::vector<double> joint_space){
+    std::vector<double> result;
+    result = joint_space;
 
-    std::ifstream infile;
-    infile.open(file_name.data(), std::ios::in);
-    assert(infile.is_open());
-
-    while (infile){
-        std::string s;
-        std::getline(infile, s);
-        std::istringstream is(s);
-        std::vector<double> join_space;
-        join_space.resize(6);
-        is >> join_space.at(0) >> join_space.at(1) >> join_space.at(2) >> join_space.at(3) >> join_space.at(4) >> join_space.at(5);
-        // wrapToPi(join_space);
-        result.push_back(join_space);
+    for (unsigned int i = 0; i < result.size(); i++){
+        if (result.at(i) >= M_PI) result.at(i) -= 2 * M_PI;
+        else if (result.at(i) < -M_PI) result.at(i) += 2 * M_PI;
     }
-    result.pop_back();
 
     return result;
 }
+
+namespace controller{
+
+void linearInterpolateConfigurationss(std::vector<std::vector<double>> &result){
+    double step = 0.1;
+
+    unsigned int i = 0;
+    while (i < result.size() - 1){
+        std::vector<std::vector<double>> temp;
+        temp.clear();
+
+        double sum_temp = 0;
+
+        for (unsigned int j = 0; j < result.at(i).size(); j++)
+            sum_temp += pow(angles::normalize_angle(result.at(i + 1).at(j) - result.at(i).at(j)), 2);
+
+        double norm = sqrt(sum_temp);
+
+        if (norm > 0.5){
+            std::vector<double> d_angle;
+            d_angle.resize(6);
+
+            for (unsigned int j = 0; j < result.at(i).size(); j++)
+                d_angle.at(j) = ((angles::normalize_angle(result.at(i + 1).at(j) - result.at(i).at(j))) / norm * step) + result.at(i).at(j);
+
+            for (unsigned int k = 0; k < i + 1; k++)
+                temp.push_back(result.at(k));
+
+            temp.push_back(d_angle);
+
+            for (unsigned int k = i + 1; k < result.size(); k++)
+                temp.push_back(result.at(k));
+
+            result = temp;
+        }
+        else
+            i++;
+    }
+
+    for (unsigned int i=0; i<result.size(); i++){
+        result.at(i) = wrapToPiJointSpacee(result.at(i));
+    }
+}
+};
+
 
 Manipulator_Controller::Manipulator_Controller(){
     // client_ = new Client("/scaled_pos_joint_traj_controller/follow_joint_trajectory", true);
@@ -92,9 +124,6 @@ void Manipulator_Controller::trajectoryBetween2Points(std::vector<double> start_
 }
 
 void Manipulator_Controller::trajectoryFromArray(std::vector<std::vector<double>> array){
-
-    array = input_dataa("/home/mintnguyen/Documents/NRMDTS_Implementation/tntp_implementation/motion.txt");
-
     //
     goal_.trajectory.header.stamp = ros::Time::now() + ros::Duration(1);
 
@@ -111,13 +140,13 @@ void Manipulator_Controller::trajectoryFromArray(std::vector<std::vector<double>
     for (unsigned int i = 0; i < array.size(); i++){
         // wrapToPi(array.at(i));
         double time;
-        time = 4+(i*0.05);
+        time = 4 + (i * 1);
         goal_.trajectory.points.at(i) = initialiseTrajectoryPoint(array.at(i), time);
     }
 
     client_->sendGoal(goal_);
 
-    while (client_->getState() != actionlib::SimpleClientGoalState::SUCCEEDED && ros::ok())    {
+    while (client_->getState() != actionlib::SimpleClientGoalState::SUCCEEDED && ros::ok()){
         client_->waitForResult(ros::Duration(1));
 
         ROS_INFO("Current State: %s", client_->getState().toString().c_str());
