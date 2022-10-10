@@ -7,6 +7,7 @@
 #include "input_data.h"
 #include "environmental_obstacles.h"
 #include "definitions.h"
+#include "asymp_tntp_algorithm.h"
 
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit_visual_tools/moveit_visual_tools.h>
@@ -91,7 +92,7 @@ int main(int argc, char **argv)
 
   our_prmstar.showDetails();
 
-  /////////////////////////// TESTING PRM STAR ALGORITHM //////////////////////////////////////////////
+  /////////////////////////////////////////// TESTING PRM STAR ALGORITHM //////////////////////////////////////////
 
   // std::vector<double> def{0, -M_PI / 2, 0, -M_PI / 2, 0, 0};
   // std::vector<double> start{0, -M_PI, 0, -M_PI / 2, 0, 0};
@@ -114,35 +115,74 @@ int main(int argc, char **argv)
   // controller->trajectoryFromArray(joint_result);
 
   //////////////////////////////////////////////////// THE PRE-DEFINED TASK-SPACE CURVE///////////////////////////
-  // std::cout << "YT: we define the task-space curve. " << std::endl;
-  // // std::string file_name = "/home/yangtong/PRM_test/src/ur5_moveit_perception/data/case_study_1";
-  // std::string file_name = "/home/mintnguyen/Documents/NRMDTS_Implementation/tntp_implementation/data/case_study_1";
-  // std::string input_file_name = file_name + ".txt";
+  std::cout << "YT: we define the task-space curve. " << std::endl;
+  // std::string file_name = "/home/yangtong/PRM_test/src/ur5_moveit_perception/data/case_study_1";
+  std::string file_name = "/home/mintnguyen/Documents/NRMDTS_Implementation/tntp_implementation/data/case_study_1";
+  std::string input_file_name = file_name + ".txt";
 
-  // std::vector<TaskSpaceWaypoint> TSpoints;
-  // TSpoints = case_study_1_matrix44(input_file_name);
+  std::vector<TaskSpaceWaypoint> TSpoints;
+  TSpoints = case_study_1_matrix44(input_file_name);
 
-  // // std::cout << "YT: We do collision checking for all the IKs" << std::endl;
-  // collision_detection::CollisionRequest collision_request;
-  // collision_detection::CollisionResult collision_result;
-  // for(auto iter = TSpoints.begin(); iter != TSpoints.end(); ++iter)
-  // {
-  // 	int i = 0;
-  // 	while(i < iter->iks_.size()){
-  // 		std::vector<double> temp = iter->iks_[i];
-  // 			current_state.setJointGroupPositions(joint_model_group, temp);
+  // std::cout << "YT: We do collision checking for all the IKs" << std::endl;
+  collision_detection::CollisionRequest collision_request;
+  collision_detection::CollisionResult collision_result;
+  for(auto iter = TSpoints.begin(); iter != TSpoints.end(); ++iter)
+  {
+  	int i = 0;
+  	while(i < iter->iks_.size()){
+  		std::vector<double> temp = iter->iks_[i];
+  			current_state.setJointGroupPositions(joint_model_group, temp);
 
-  // 		collision_result.clear();
-  // 		planning_scene->checkCollision(collision_request, collision_result);
+  		collision_result.clear();
+  		planning_scene->checkCollision(collision_request, collision_result);
 
-  // 		if(collision_result.collision)
-  // 			iter->iks_.erase(iter->iks_.begin()+i);
+  		if(collision_result.collision)
+  			iter->iks_.erase(iter->iks_.begin()+i);
 
-  // 		else
-  // 			++i;
-  // 	}
-  // 	// std::cout << "Task-space point " << iter-TSpoints.begin() << " has " << iter->iks_.size() << " valid IKs" << std::endl;
-  // }
+  		else
+  			++i;
+  	}
+  	// std::cout << "Task-space point " << iter-TSpoints.begin() << " has " << iter->iks_.size() << " valid IKs" << std::endl;
+  }
+
+  /////////////////////////////////////////WE CREATE CONTINUOUS TRACKING MOTIONS//////////////////////////////////
+	std::vector<ContinuousTrackingMotion> CTM;
+
+	double epsilon_cont = 0.1;
+	optimal_tntp_algorithm::defineStates(TSpoints, epsilon_cont, CTM);
+	// Note that here the continuous sets do not have an index
+
+	// We create the home configuration as the first continuous set, and adjust all data structures
+	ContinuousTrackingMotion CTM0;
+	CTM0.color_ = 0;
+	CTM0.first_point_index_ = 0;
+	CTM0.last_point_index_ = 0;
+	CTM.insert(CTM.begin(), CTM0);
+	for (auto iter = CTM.begin() + 1; iter != CTM.end(); ++iter)
+	{
+		iter->color_ = iter - CTM.begin();
+		iter->first_point_index_++;
+		iter->last_point_index_++;
+	}
+
+	std::cout << "We check all CTMs: " << std::endl;
+	for(auto iter = CTM.begin(); iter != CTM.end(); ++iter)
+	{
+		std::cout << "[color, first_point_index, last_point_index] = [" << iter->color_ << ", " << iter->first_point_index_ << ", " << iter->last_point_index_ << "]" << std::endl;
+	}
+
+	for(auto iter = TSpoints.begin(); iter != TSpoints.end(); ++iter)
+	{
+		for(auto iter2 = iter->color_.begin(); iter2 != iter->color_.end(); ++iter2)
+		{
+			++*iter2;
+		}
+	}
+
+
+
+
+
 
   ros::spin();
 

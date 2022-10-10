@@ -17,8 +17,6 @@ void defineStates(std::vector<TaskSpaceWaypoint>& TSpoints,
     double epsilon_cont, 
     std::vector<ContinuousTrackingMotion>& continuous_set);
 
-
-
 struct OptimalTNTPSolver
 {
 public: 
