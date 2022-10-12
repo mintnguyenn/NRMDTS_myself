@@ -1,12 +1,14 @@
 #include "ur5e_controller.h"
 
-trajectory_msgs::JointTrajectoryPoint initialiseTrajectoryPoint(const std::vector<double> joint_space, double duration){
+trajectory_msgs::JointTrajectoryPoint initialiseTrajectoryPoint(const std::vector<double> joint_space, double duration)
+{
     trajectory_msgs::JointTrajectoryPoint points;
 
     points.positions.resize(6);
     points.velocities.resize(6);
     points.accelerations.resize(6);
-    for (unsigned int i = 0; i < 6; i++){
+    for (unsigned int i = 0; i < 6; i++)
+    {
         points.positions[i] = joint_space.at(i);
         points.velocities[i] = 0.0;
         points.accelerations[i] = 0.0;
@@ -17,71 +19,84 @@ trajectory_msgs::JointTrajectoryPoint initialiseTrajectoryPoint(const std::vecto
     return points;
 }
 
-void wrapToPi(std::vector<double> &joint_space){
-    for (unsigned int i = 0; i < joint_space.size(); i++){
-        if (joint_space.at(i) > M_PI) joint_space.at(i) -= 2 * M_PI;
-        else if (joint_space.at(i) < -M_PI) joint_space.at(i) += 2 * M_PI;
+void wrapToPi(std::vector<double> &joint_space)
+{
+    for (unsigned int i = 0; i < joint_space.size(); i++)
+    {
+        if (joint_space.at(i) > M_PI)
+            joint_space.at(i) -= 2 * M_PI;
+        else if (joint_space.at(i) < -M_PI)
+            joint_space.at(i) += 2 * M_PI;
     }
 }
 
-std::vector<double> wrapToPiJointSpacee(std::vector<double> joint_space){
+std::vector<double> wrapToPiJointSpacee(std::vector<double> joint_space)
+{
     std::vector<double> result;
     result = joint_space;
 
-    for (unsigned int i = 0; i < result.size(); i++){
-        if (result.at(i) >= M_PI) result.at(i) -= 2 * M_PI;
-        else if (result.at(i) < -M_PI) result.at(i) += 2 * M_PI;
+    for (unsigned int i = 0; i < result.size(); i++)
+    {
+        if (result.at(i) >= M_PI)
+            result.at(i) -= 2 * M_PI;
+        else if (result.at(i) < -M_PI)
+            result.at(i) += 2 * M_PI;
     }
 
     return result;
 }
 
-namespace controller{
+namespace controller
+{
 
-void linearInterpolateConfigurationss(std::vector<std::vector<double>> &result){
-    double step = 0.1;
+    void linearInterpolateConfigurationss(std::vector<std::vector<double>> &result)
+    {
+        double step = 0.1;
 
-    unsigned int i = 0;
-    while (i < result.size() - 1){
-        std::vector<std::vector<double>> temp;
-        temp.clear();
+        unsigned int i = 0;
+        while (i < result.size() - 1)
+        {
+            std::vector<std::vector<double>> temp;
+            temp.clear();
 
-        double sum_temp = 0;
-
-        for (unsigned int j = 0; j < result.at(i).size(); j++)
-            sum_temp += pow(angles::normalize_angle(result.at(i + 1).at(j) - result.at(i).at(j)), 2);
-
-        double norm = sqrt(sum_temp);
-
-        if (norm > 0.5){
-            std::vector<double> d_angle;
-            d_angle.resize(6);
+            double sum_temp = 0;
 
             for (unsigned int j = 0; j < result.at(i).size(); j++)
-                d_angle.at(j) = ((angles::normalize_angle(result.at(i + 1).at(j) - result.at(i).at(j))) / norm * step) + result.at(i).at(j);
+                sum_temp += pow(angles::normalize_angle(result.at(i + 1).at(j) - result.at(i).at(j)), 2);
 
-            for (unsigned int k = 0; k < i + 1; k++)
-                temp.push_back(result.at(k));
+            double norm = sqrt(sum_temp);
 
-            temp.push_back(d_angle);
+            if (norm > 0.5)
+            {
+                std::vector<double> d_angle;
+                d_angle.resize(6);
 
-            for (unsigned int k = i + 1; k < result.size(); k++)
-                temp.push_back(result.at(k));
+                for (unsigned int j = 0; j < result.at(i).size(); j++)
+                    d_angle.at(j) = ((angles::normalize_angle(result.at(i + 1).at(j) - result.at(i).at(j))) / norm * step) + result.at(i).at(j);
 
-            result = temp;
+                for (unsigned int k = 0; k < i + 1; k++)
+                    temp.push_back(result.at(k));
+
+                temp.push_back(d_angle);
+
+                for (unsigned int k = i + 1; k < result.size(); k++)
+                    temp.push_back(result.at(k));
+
+                result = temp;
+            }
+            else
+                i++;
         }
-        else
-            i++;
-    }
 
-    for (unsigned int i=0; i<result.size(); i++){
-        result.at(i) = wrapToPiJointSpacee(result.at(i));
+        for (unsigned int i = 0; i < result.size(); i++)
+        {
+            result.at(i) = wrapToPiJointSpacee(result.at(i));
+        }
     }
-}
 };
 
-
-Manipulator_Controller::Manipulator_Controller(){
+Manipulator_Controller::Manipulator_Controller()
+{
     // client_ = new Client("/scaled_pos_joint_traj_controller/follow_joint_trajectory", true);
     client_ = new Client("/pos_joint_traj_controller/follow_joint_trajectory", true);
 
@@ -95,7 +110,8 @@ Manipulator_Controller::Manipulator_Controller(){
 
 Manipulator_Controller::~Manipulator_Controller() {}
 
-void Manipulator_Controller::trajectoryBetween2Points(std::vector<double> start_point, std::vector<double> end_point){
+void Manipulator_Controller::trajectoryBetween2Points(std::vector<double> start_point, std::vector<double> end_point)
+{
     //
     goal_.trajectory.header.stamp = ros::Time::now() + ros::Duration(1);
 
@@ -114,7 +130,8 @@ void Manipulator_Controller::trajectoryBetween2Points(std::vector<double> start_
 
     client_->sendGoal(goal_);
 
-    while (client_->getState() != actionlib::SimpleClientGoalState::SUCCEEDED && ros::ok()){
+    while (client_->getState() != actionlib::SimpleClientGoalState::SUCCEEDED && ros::ok())
+    {
         client_->waitForResult(ros::Duration(1));
 
         ROS_INFO("Current State: %s", client_->getState().toString().c_str());
@@ -123,7 +140,8 @@ void Manipulator_Controller::trajectoryBetween2Points(std::vector<double> start_
     ROS_INFO("Action ended!");
 }
 
-void Manipulator_Controller::trajectoryFromArray(std::vector<std::vector<double>> array){
+void Manipulator_Controller::trajectoryFromArray(std::vector<std::vector<double>> array)
+{
     //
     goal_.trajectory.header.stamp = ros::Time::now() + ros::Duration(1);
 
@@ -137,7 +155,8 @@ void Manipulator_Controller::trajectoryFromArray(std::vector<std::vector<double>
     goal_.trajectory.joint_names[5] = "wrist_3_joint";
 
     goal_.trajectory.points.resize(array.size());
-    for (unsigned int i = 0; i < array.size(); i++){
+    for (unsigned int i = 0; i < array.size(); i++)
+    {
         // wrapToPi(array.at(i));
         double time;
         time = 4 + (i * 1);
@@ -146,11 +165,12 @@ void Manipulator_Controller::trajectoryFromArray(std::vector<std::vector<double>
 
     client_->sendGoal(goal_);
 
-    while (client_->getState() != actionlib::SimpleClientGoalState::SUCCEEDED && ros::ok()){
-        client_->waitForResult(ros::Duration(1));
+    // while (client_->getState() != actionlib::SimpleClientGoalState::SUCCEEDED && ros::ok())
+    // {
+    //     client_->waitForResult(ros::Duration(1));
 
-        ROS_INFO("Current State: %s", client_->getState().toString().c_str());
-        sleep(2);
-    }
-    ROS_INFO("Action ended!");
+    //     ROS_INFO("Current State: %s", client_->getState().toString().c_str());
+    //     sleep(2);
+    // }
+    // ROS_INFO("Action ended!");
 }

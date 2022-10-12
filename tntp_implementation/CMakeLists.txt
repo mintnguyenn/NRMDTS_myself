@@ -1,16 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 project(tntp_implementation)
 
-find_package(PkgConfig)
-pkg_check_modules(YAMLCPP REQUIRED yaml-cpp>=0.6)
-
-find_package(yaml-cpp REQUIRED)
-
-if (NOT yaml-cpp_FOUND)
-    message(FATAL_ERROR "Could NOT find yaml-cpp")
-else ()
-    message(STATUS "***FOUND*** yaml-cpp in directory ${yaml-cpp_DIR}.")
-endif ()
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp

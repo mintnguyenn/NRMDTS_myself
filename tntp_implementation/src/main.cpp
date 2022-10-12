@@ -94,30 +94,33 @@ int main(int argc, char **argv)
 
   /////////////////////////////////////////// TESTING PRM STAR ALGORITHM //////////////////////////////////////////
 
-  // std::vector<double> def{0, -M_PI / 2, 0, -M_PI / 2, 0, 0};
-  // std::vector<double> start{0, -M_PI, 0, -M_PI / 2, 0, 0};
+  std::vector<double> def{0, -M_PI / 2, 0, -M_PI / 2, 0, 0};
+  std::vector<double> start{0, -M_PI, 0, -M_PI / 2, 0, 0};
 
-  // optimal_tntp::RobotState source(def);
-  // optimal_tntp::RobotState target(start);
-  // std::vector<optimal_tntp::RobotState> result;
-  // result.clear();
+  optimal_tntp::RobotState source(def);
+  optimal_tntp::RobotState target(start);
+  std::vector<optimal_tntp::RobotState> result;
+  result.clear();
 
-  // our_prmstar.findPath(source, target, result);
-  // std::vector<std::vector<double>> joint_result;
-  // for (unsigned int j = 0; j < result.size(); j++)
-  // {
-  //   joint_result.push_back(result.at(j).joint_);
-  // }
+  our_prmstar.findPath(source, target, result);
+  std::vector<std::vector<double>> joint_result;
+  for (unsigned int j = 0; j < result.size(); j++)
+  {
+    joint_result.push_back(result.at(j).joint_);
+  }
 
-  // controller::linearInterpolateConfigurationss(joint_result);
+  controller::linearInterpolateConfigurationss(joint_result);
 
-  // std::shared_ptr<Manipulator_Controller> controller(new Manipulator_Controller());
-  // controller->trajectoryFromArray(joint_result);
+  std::shared_ptr<Manipulator_Controller> controller(new Manipulator_Controller());
+  controller->trajectoryFromArray(joint_result);
 
   //////////////////////////////////////////////////// THE PRE-DEFINED TASK-SPACE CURVE///////////////////////////
   std::cout << "YT: we define the task-space curve. " << std::endl;
-  // std::string file_name = "/home/yangtong/PRM_test/src/ur5_moveit_perception/data/case_study_1";
-  std::string file_name = "/home/mintnguyen/Documents/NRMDTS_Implementation/tntp_implementation/data/case_study_1";
+
+  // std::string file_name = "/home/yangtong/prm_ws/src/tntp_implementation/data/case_study_1";
+  std::string file_name;
+  nh.getParam("/asympTNTP/task_space_motion", file_name);
+
   std::string input_file_name = file_name + ".txt";
 
   std::vector<TaskSpaceWaypoint> TSpoints;
