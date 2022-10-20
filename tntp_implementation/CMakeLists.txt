@@ -55,7 +55,8 @@ add_executable(${PROJECT_NAME} src/main.cpp
     src/input_data.cpp
     src/environmental_obstacles.cpp
     src/prmstar.cpp
-    src/asymp_tntp_algorithm.cpp)
+    src/asymp_tntp_algorithm.cpp
+    src/ral22_min_reconfig_tntp.cpp)
 
 ## Add cmake target dependencies of the executable, enforces generating messages
 ## VERY VERY VERY HIGHLY unlikely to change

@@ -1,4 +1,5 @@
 #include "ur5e_controller.h"
+#include "prmstar.h"
 
 trajectory_msgs::JointTrajectoryPoint initialiseTrajectoryPoint(const std::vector<double> joint_space, double duration)
 {
@@ -48,9 +49,17 @@ std::vector<double> wrapToPiJointSpacee(std::vector<double> joint_space)
 
 namespace controller
 {
-
-    void linearInterpolateConfigurationss(std::vector<std::vector<double>> &result)
+    double getExpectedExecutionTime6D(std::vector<optimal_tntp::RobotState>& latest_motion_segment, const double joint_space_6d_velocity)
     {
+        return optimal_tntp::pathLength(latest_motion_segment) / joint_space_6d_velocity;
+    }
+
+    void linearInterpolateConfigurations(std::vector<std::vector<double>> &result)
+    {
+        // YT: note that here each configuration must have 6 elements, 
+        // no 5 joint-angles (because then it would be different from the expected task execution time), 
+        // and no [joint, color] pair
+
         double step = 0.1;
 
         unsigned int i = 0;
@@ -93,6 +102,35 @@ namespace controller
             result.at(i) = wrapToPiJointSpacee(result.at(i));
         }
     }
+
+    void linearInterpolateConfigurations(std::vector<optimal_tntp::RobotState>& result)
+    {
+        std::vector<std::vector<double>> result_temp;
+
+        result_temp.resize(result.size());
+
+        for(unsigned int i = 0; i < result.size(); ++i)
+        {
+            result_temp[i].resize(6);
+            for(unsigned int j = 0; j < 6; ++j)
+            {
+                result_temp[i][j] = result[i].joint_[j];   
+            }
+        }
+        linearInterpolateConfigurations(result_temp);
+
+        result.clear();
+        result.resize(result_temp.size());
+        for(unsigned int i = 0; i < result_temp.size(); ++i)
+        {
+            result[i].joint_.resize(6);
+            for(unsigned int j = 0; j < 6; ++j)
+            {
+                result[i].joint_[j] = result_temp[i][j];
+            }
+        }
+    }
+
 };
 
 Manipulator_Controller::Manipulator_Controller()
@@ -173,4 +211,21 @@ void Manipulator_Controller::trajectoryFromArray(std::vector<std::vector<double>
     //     sleep(2);
     // }
     // ROS_INFO("Action ended!");
+}
+
+void Manipulator_Controller::trajectoryFromArray(std::vector<optimal_tntp::RobotState> array)
+{
+    std::vector<std::vector<double> > array_temp;
+    array_temp.resize(array.size());
+
+    for(unsigned int i = 0; i < array.size(); ++i)
+    {
+        array_temp[i].resize(6);
+        for(unsigned int j = 0; j < 6; ++j)
+        {
+            array_temp[i][j] = array[i].joint_[j];
+        }
+    }
+
+    trajectoryFromArray(array_temp);
 }

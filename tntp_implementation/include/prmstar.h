@@ -75,7 +75,7 @@ public:
         milestone_count_ = 0;
         edge_count_ = 0;
 
-        maxConnectionDistance_ = 6;
+        maxConnectionDistance_ = 5;
         maxCollisionCheckingDistance_ = 0.1;
 
         collisionChecker_ = collisionChecker;

@@ -14,6 +14,7 @@ namespace optimal_tntp
 
     double pathLength(const std::vector<RobotState> &the_motion)
     {
+        // This is the 6D path length
         if (the_motion.size() <= 1)
             return 100000.0;
 
